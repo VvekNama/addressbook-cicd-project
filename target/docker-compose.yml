@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  app:
+    image: addressbook-app:latest # Replace with your built image name
+    build:
+      context: . # Path to the directory containing your Dockerfile
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080" # Map Tomcat port 8080 to host
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db # Hostname of the MySQL service
+      DB_PORT: 3306
+      DB_NAME: addressbook_db # Replace with your database name
+      DB_USER: user # Replace with your database user
+      DB_PASSWORD: password # Replace with your database password
+
+  db:
+    image: mysql:8.0
+    container_name: mysql-db
+    ports:
+      - "3306:3306" # Map MySQL port 3306 to host
+    environment:
+      MYSQL_DATABASE: addressbook_db # Replace with your database name
+      MYSQL_USER: user # Replace with your database user
+      MYSQL_PASSWORD: password # Replace with your database password
+      MYSQL_ROOT_PASSWORD: rootpassword # Replace with your MySQL root password
+    volumes:
+      - db_data:/var/lib/mysql # Persist database data across container restarts
+
+volumes:
+  db_data: # Volume to persist MySQL data
+
