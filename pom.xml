@@ -2,9 +2,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.edurekademo.tutorial</groupId>
+    <groupId>com.vaadin.tutorial</groupId>
     <artifactId>addressbook</artifactId>
-    <packaging>war</packaging> <!-- Ensures that the WAR file is generated -->
+    <packaging>war</packaging>
     <version>2.0</version>
     <name>Vaadin Addressbook example</name>
 
@@ -13,56 +13,32 @@
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <vaadin.version>8.0.0.alpha2</vaadin.version>
         <vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
-        <!-- JaCoCo Properties -->
-        <jacoco.version>0.8.6</jacoco.version>
-        <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
-        <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-        <sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
-        <sonar.language>java</sonar.language>
     </properties>
-
     <repositories>
         <repository>
             <id>vaadin-prereleases</id>
             <name>Vaadin Pre-releases</name>
             <url>https://maven.vaadin.com/vaadin-prereleases</url>
         </repository>
+        <!-- Essential Vaadin artifacts are in maven central, but maven.vaadin.com 
+            contains a huge set of additional libraries. See vaadin.com/directory -->
         <repository>
             <id>vaadin-addons</id>
-            <url>http://maven.vaadin.com/vaadin-addons</url>
-        </repository>
-        <repository>
-            <id>vaadin-snapshots</id>
-            <url>http://oss.sonatype.org/content/repositories/vaadin-snapshots/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
+            <url>https://maven.vaadin.com/vaadin-addons</url>
         </repository>
     </repositories>
-
     <dependencies>
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-compatibility-server</artifactId>
             <version>${vaadin.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.12.0</version> <!-- Or latest version -->
-        </dependency>
-
-        
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-compatibility-shared</artifactId>
             <version>${vaadin.version}</version>
         </dependency>
-        <dependency>
+         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-compatibility-client-compiled</artifactId>
             <version>${vaadin.version}</version>
@@ -76,86 +52,21 @@
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>3.0.1</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
-        <!-- Logging dependencies -->
+        <!-- The huge set of awesome Java libraries are available as such 
+            for Vaadin developers, you should take the advantage of those. In this app 
+            we just use the commons-beanutils to help implementing the fake backend. -->
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.9</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.7</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>1.7.7</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>1.7.7</version>
-        </dependency>
-        <!-- Testing dependencies -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.7</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- JSON and other common dependencies -->
-        <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-            <version>20140107</version>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-jaxrs</artifactId>
-            <version>1.9.4</version>
-        </dependency>
-        <!-- JaCoCo plugin for test coverage -->
-        <dependency>
-            <groupId>org.jacoco</groupId>
-            <artifactId>jacoco-maven-plugin</artifactId>
-            <version>0.8.6</version>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+            <version>1.9.2</version>
+            <type>jar</type>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
-            <!-- Maven WAR Plugin for packaging the WAR file -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>3.3.2</version>
-                <configuration>
-                    <!-- Customize the output directory for the WAR -->
-                    <warName>addressbook</warName>
-                    <webResources>
-                        <resource>
-                            <directory>src/main/webapp</directory>
-                            <includes>
-                                <include>**/*</include>
-                            </includes>
-                        </resource>
-                    </webResources>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>3.3.2</version>
-                <configuration>
-                   <warSourceDirectory>src/main/webapp</warSourceDirectory>
-                </configuration>
-            </plugin>
-            
-            <!-- Maven Compiler Plugin for Java compilation -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -165,80 +76,11 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
-
-            <!-- Jetty Maven Plugin (optional if you want to run the app via Jetty) -->
             <plugin>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>
                 <version>9.2.3.v20140905</version>
             </plugin>
-
-            <!-- Surefire Plugin for running tests -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.19.1</version>
-                <configuration>
-                    <parallel>methods</parallel>
-                    <threadCount>10</threadCount>
-                    <includes>
-                        <include>**/Test*.java</include>
-                        <include>**/Test.java</include>
-                        <include>**/TestCase.java</include>
-                    </includes>
-                    <excludes>
-                        <exclude>**/*Abstract*Test.java</exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
         </plugins>
-        <finalName>addressbook</finalName> <!-- Ensure the WAR file is named 'addressbook.war' -->
     </build>
-
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>2.19.1</version>
-            </plugin>
-        </plugins>
-    </reporting>
-
-    <profiles>
-        <profile>
-            <id>development</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-        </profile>
-        <profile>
-            <id>metrics</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-pmd-plugin</artifactId>
-                        <version>3.2</version>
-                        <configuration>
-                            <targetJdk>1.8</targetJdk>
-                            <aggregate>true</aggregate>
-                            <format>xml</format>
-                            <minimumTokens>20</minimumTokens>
-                            <failOnViolation>true</failOnViolation>
-                            <failurePriority>2</failurePriority>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <artifactId>findbugs-maven-plugin</artifactId>
-                        <version>2.4.0</version>
-                        <configuration>
-                            <effort>Max</effort>
-                            <xmlOutput>true</xmlOutput>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 </project>
